@@ -150,9 +150,9 @@
 </head>
 <body>
 
-<header onclick="goToMainMenu()">
+<header id="header" onclick="goToMainMenu()">
     <h1>Assignment System</h1>
-    <button id="logout">Logout</button>
+    <button id="logout" style="display: none;">Logout</button>
 </header>
 
 <div class="container" id="content">
@@ -167,8 +167,12 @@
     const courses = ['HCI', 'Prog 1', 'Mathe 1', 'GRA'];
     const assignments = ['Abgabe 1', 'Abgabe 2', 'Abgabe 3'];
     let currentAssignment = null;
+    let currentCourse = null;
+    let isLoggedIn = false;
 
     function login() {
+        isLoggedIn = true;
+        updateLogoutButtonVisibility();
         goToMainMenu();
     }
 
@@ -182,6 +186,7 @@
     }
 
     function openCourse(course) {
+        currentCourse = course;
         document.getElementById('content').innerHTML = `
             <h2>${course} - Assignments</h2>
             <ul class="list" id="assignment-list">
@@ -192,6 +197,7 @@
                     </li>
                 `).join('')}
             </ul>
+            <button onclick="goToMainMenu()">Back to Main Menu</button>
         `;
     }
 
@@ -217,6 +223,7 @@
                     return `<li onclick="openTask(${task})">Task ${task}</li>`;
                 }).join('')}
             </ul>
+            <button onclick="goBackToCourse()">Back to Course</button>
         `;
     }
 
@@ -235,10 +242,10 @@
                <div class="comment">- Second placeholder comment giving more feedback.</div>`
             : '';
 
-        const solution = `<div class="solution">
+        const solution = !isEditable ?`<div class="solution">
             <h3>Musterlösung</h3>
             <textarea disabled>This is the sample solution for this task.</textarea>
-       </div>`;
+       </div>` : '';
 
         document.getElementById('content').innerHTML = `
             <h2>Task ${task}</h2>
@@ -246,7 +253,6 @@
                 ${content}
                 ${solution}
                 ${comments}
-                
             </div>
             
             <button class="submit">Submit</button>
@@ -260,7 +266,15 @@
         }
     }
 
+    function goBackToCourse() {
+        if (currentCourse) {
+            openCourse(currentCourse);
+        }
+    }
+
     document.getElementById('logout').addEventListener('click', () => {
+        isLoggedIn = false;
+        updateLogoutButtonVisibility();
         document.getElementById('content').innerHTML = `
             <div class="login" id="login-page">
                 <h2>Login</h2>
@@ -268,6 +282,15 @@
             </div>
         `;
     });
+
+    function updateLogoutButtonVisibility() {
+        const logoutButton = document.getElementById('logout');
+        if (isLoggedIn) {
+            logoutButton.style.display = 'inline-block';
+        } else {
+            logoutButton.style.display = 'none';
+        }
+    }
 </script>
 </body>
 </html>
