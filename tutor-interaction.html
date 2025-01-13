@@ -204,31 +204,27 @@
 
     function openAssignment(assignment) {
         currentAssignment = assignment;
-        const tasks = assignment === 'Abgabe 1' 
-            ? [
-                { number: 1, points: '4/5 Punkten' },
-                { number: 2, points: '3/5 Punkten' },
-                { number: 3, points: '5/5 Punkten' },
-                { number: 4, points: '2/3 Punkten' },
-                { number: 5, points: '1/2 Punkten' },
-            ]
-            : [1, 2, 3, 4, 5];
+        const tasks = [
+                { number: 1, points: 5 },
+                { number: 2, points: 5 },
+                { number: 3, points: 5},
+                { number: 4, points: 3 },
+                { number: 5, points: 2 },
+            ];
+            
 
         document.getElementById('content').innerHTML = `
             <h2>${assignment} - Tasks</h2>
             <ul class="list" id="task-list">
                 ${tasks.map(task => {
-                    if (typeof task === 'object') {
-                        return `<li onclick="openTask(${task.number})">Task ${task.number}</li>`;
-                    }
-                    return `<li onclick="openTask(${task})">Task ${task}</li>`;
+                    return `<li onclick="openTask(${task.number},${task.points})">Task ${task.number}</li>`;
                 }).join('')}
             </ul>
             <button onclick="goBackToCourse()">Back to Course</button>
         `;
     }
 
-    function openTask(task) {
+    function openTask(task, maxPoints) {
         const isEditable = false;
         const content = task === 3
             ? `<div class="text-area">
@@ -244,7 +240,7 @@
                 <h3>Korrektur</h3>
                 <div class="text-area">
                     <textarea placeholder="Korrektur">${currentAssignment == 'Abgabe 1' ? 'Dies ist eine Korrektur' : ''}</textarea></div>
-                    <span>Punkte: </span><input type="number" placeholder="Punkte" value="${currentAssignment == 'Abgabe 1' ? 15 : 0}">
+                    <span>Punkte: </span><input type="number" placeholder="Punkte" value="${currentAssignment == 'Abgabe 1' ? 15 : 0}"><span> / ${maxPoints} </span>
                </div>`
             ;
 
@@ -253,16 +249,15 @@
             <textarea disabled>This is the sample solution for this task.</textarea>
        </div>`;
 
-        document.getElementById('content').innerHTML = `
+       document.getElementById('content').innerHTML = `
             <h2>Task ${task}</h2>
             <div class="task">
                 ${content}
                 ${solution}
                 ${comments}
-                
             </div>
             
-            <button class="submit">Submit</button>
+            ${isEditable ? '<button class="submit">Submit</button>' : ''}
             <button onclick="goBackToAssignment()">Back to Assignment</button>
         `;
     }
