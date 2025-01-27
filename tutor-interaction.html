@@ -240,7 +240,9 @@
                 <h3>Korrektur</h3>
                 <div class="text-area">
                     <textarea placeholder="Korrektur">${currentAssignment == 'Abgabe 1' ? 'Dies ist eine Korrektur' : ''}</textarea></div>
-                    <span>Punkte: </span><input type="number" placeholder="Punkte" value="${currentAssignment == 'Abgabe 1' ? 15 : 0}"><span> / ${maxPoints} </span>
+                    <span>Punkte: </span><input type="number" placeholder="Punkte" value="${currentAssignment == 'Abgabe 1' ? 4 : 0}"><span> / ${maxPoints} </span>
+
+                    <button onclick="goBackToAssignment()" class="submit">Submit</button>
                </div>`
             ;
 
